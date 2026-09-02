@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="索尼 BRAVIA 5 免费 AirPlay 实战：安装 ADB、无线配对、区分配对端口与连接端口，并用开源 AirPlay Server 替代付费投屏应用。" />
+  <title>索尼 BRAVIA 5 免费 AirPlay 实战：ADB 配对、端口避坑与开源替代乐播</title>
+  <style>
+    :root { --bg:#f4f5f7; --paper:#fff; --ink:#17202a; --muted:#667085; --line:#e4e7ec; --brand:#d6335c; --brand2:#7c3aed; --good:#087a55; --code:#101828; --shadow:0 18px 50px rgba(16,24,40,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 10% 0%,rgba(214,51,92,.08),transparent 30rem),radial-gradient(circle at 90% 20%,rgba(124,58,237,.08),transparent 32rem),var(--bg); font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    a { color:var(--brand2); text-decoration-thickness:1px; text-underline-offset:3px; }
+    .shell { width:min(1120px,calc(100% - 32px)); margin:32px auto 72px; }
+    .hero,main,.toc { background:rgba(255,255,255,.95); border:1px solid rgba(228,231,236,.9); box-shadow:var(--shadow); }
+    .hero { position:relative; overflow:hidden; border-radius:28px; padding:56px; }
+    .hero::after { content:"ADB → AirPlay"; position:absolute; right:-18px; bottom:-34px; color:rgba(214,51,92,.07); font-size:clamp(54px,10vw,116px); font-weight:900; white-space:nowrap; letter-spacing:-5px; }
+    .eyebrow { color:var(--brand); font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { max-width:880px; margin:12px 0 18px; font-size:clamp(34px,5vw,62px); line-height:1.08; letter-spacing:-.035em; }
+    .lede { max-width:780px; color:var(--muted); font-size:19px; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+    .pill { border-radius:999px; padding:6px 12px; background:#f2f4f7; color:#475467; font-size:13px; font-weight:650; }
+    .toc { border-radius:20px; margin:22px 0; padding:22px 28px; }
+    .toc strong { margin-right:14px; }
+    .toc a { display:inline-block; margin:4px 12px 4px 0; color:#475467; text-decoration:none; }
+    main { border-radius:28px; padding:28px 56px 56px; }
+    section { padding-top:42px; }
+    h2 { margin:0 0 18px; font-size:clamp(26px,3vw,36px); line-height:1.25; letter-spacing:-.02em; }
+    h3 { margin:30px 0 10px; font-size:21px; }
+    p { margin:10px 0 16px; }
+    ul,ol { padding-left:1.4em; }
+    li+li { margin-top:6px; }
+    .summary,.callout { border-radius:16px; padding:18px 20px; margin:20px 0; }
+    .summary { background:linear-gradient(135deg,#fff2f5,#f6f0ff); border:1px solid #f4cbd7; }
+    .callout { background:#f8fafc; border:1px solid var(--line); }
+    .callout.good { background:#ecfdf3; border-color:#abefc6; }
+    .callout.warn { background:#fffaeb; border-color:#fedf89; }
+    .kicker { font-weight:800; color:var(--brand); }
+    table { width:100%; border-collapse:collapse; margin:18px 0 24px; overflow:hidden; border-radius:14px; border:1px solid var(--line); }
+    th,td { padding:13px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { background:#f9fafb; font-size:14px; color:#475467; }
+    tr:last-child td { border-bottom:0; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em; }
+    code:not(pre code) { padding:.12em .36em; border-radius:5px; background:#f2f4f7; color:#344054; }
+    .codebox { position:relative; margin:14px 0 22px; }
+    pre { margin:0; padding:19px 20px; overflow-x:auto; border-radius:14px; background:var(--code); color:#e5e7eb; line-height:1.55; box-shadow:inset 0 1px rgba(255,255,255,.07); }
+    .copy { position:absolute; top:9px; right:9px; border:1px solid #475467; border-radius:8px; padding:5px 9px; color:#d0d5dd; background:#1d2939; cursor:pointer; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; align-items:center; margin:22px 0; }
+    .flow div { min-height:88px; display:grid; place-items:center; text-align:center; padding:12px; border:1px solid var(--line); border-radius:14px; background:#fff; font-weight:750; }
+    .flow .arrow { min-height:auto; border:0; background:transparent; color:var(--brand); font-size:24px; }
+    details { border:1px solid var(--line); border-radius:14px; padding:13px 16px; margin:14px 0; background:#fff; }
+    summary { cursor:pointer; font-weight:750; }
+    .result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0; }
+    .result-grid div { padding:18px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); }
+    .result-grid b { display:block; color:var(--good); font-size:24px; margin-bottom:2px; }
+    footer { color:var(--muted); font-size:13px; margin-top:24px; text-align:center; }
+    @media(max-width:760px){ .shell{width:min(100% - 20px,1120px);margin-top:10px}.hero,main{padding:28px 22px;border-radius:20px}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.result-grid{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap} }
+    @media print { body{background:#fff}.shell{width:100%;margin:0}.hero,main,.toc{box-shadow:none;border-color:#ddd}.copy{display:none} }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="eyebrow">Sony BRAVIA · Android TV · AirPlay</div>
+      <h1>索尼 BRAVIA 5 免费 AirPlay 实战</h1>
+      <p class="lede">从零安装 ADB、完成 Android 电视无线配对，避开“配对端口”和“连接端口”的大坑，再用 F-Droid 开源接收器合法替代付费乐播。本文同时覆盖 macOS 与 Windows。</p>
+      <div class="meta">
+        <span class="pill">实测设备：Sony BRAVIA 4K AE2</span><span class="pill">系统：Android 14 / API 34</span><span class="pill">ADB：Platform-Tools 37.0.1</span><span class="pill">更新：2026-09-02</span>
+      </div>
+    </header>
+    <nav class="toc" aria-label="目录"><strong>目录</strong><a href="#conclusion">结论</a><a href="#adb">安装 ADB</a><a href="#pair">无线配对</a><a href="#ports">端口避坑</a><a href="#diagnose">故障排查</a><a href="#airplay">侦测 AirPlay</a><a href="#opensource">开源替代</a><a href="#verify">验证结果</a><a href="#security">安全收尾</a></nav>
+    <main>
+      <section id="conclusion">
+        <h2>先说结论</h2>
+        <div class="summary"><p><span class="kicker">可行，而且不需要破解付费校验。</span>正确做法是完全绕过乐播应用：通过 ADB 安装开源的 <strong>AirPlay Server</strong>，确认新接收器工作后，再将乐播设为可恢复的“停用”。</p></div>
+        <div class="flow"><div>安装 ADB</div><div class="arrow">→</div><div>配对后连接电视</div><div class="arrow">→</div><div>安装开源接收器</div></div>
+        <p>本次实测最终状态：电视以 <code>Android AirPlay</code> 广播，端口 <code>7000</code> 可达；客户端成功建立 HEVC/H.265 镜像，分辨率为 <code>2880×2160</code>。乐播进程及服务被可逆停用。</p>
+      </section>
+
+      <section id="adb">
+        <h2>一、安装 ADB：macOS 与 Windows</h2>
+        <p>ADB 包含在 Google 的 Android SDK Platform-Tools 中。建议始终使用最新版；Google 说明新版工具向后兼容，独立下载包同时提供 Windows、macOS 和 Linux 版本。</p>
+        <h3>macOS：使用 Homebrew</h3>
+        <div class="codebox"><button class="copy">复制</button><pre><code>brew install --cask android-platform-tools
+adb version</code></pre></div>
+        <p>没有 Homebrew 时，也可以从 Google 官方页面下载 macOS 版 Platform-Tools，解压后在该目录运行 <code>./adb</code>。</p>
+        <h3>Windows：官方 ZIP 方式</h3>
+        <ol><li>下载 <code>platform-tools-latest-windows.zip</code>。</li><li>解压到固定目录，例如 <code>C:\platform-tools</code>。</li><li>在该目录打开 PowerShell；或把该目录加入系统 <code>Path</code>。</li><li>运行下面的命令验证。</li></ol>
+        <div class="codebox"><button class="copy">复制</button><pre><code>cd C:\platform-tools
+.\adb.exe version
+
+# 仅对当前 PowerShell 会话加入 Path（可选）
+$env:Path += ";C:\platform-tools"
+adb version</code></pre></div>
+        <div class="callout"><strong>提示：</strong>Windows 无线 ADB 不需要额外 USB 驱动；只有使用 USB 调试时，部分品牌设备才可能需要 OEM 驱动。</div>
+      </section>
+
+      <section id="pair">
+        <h2>二、在电视上开启无线调试</h2>
+        <ol><li>电视与电脑连接同一个局域网。</li><li>进入“设置 → 系统 → 关于”，连续点击“版本号”约 7 次。</li><li>进入“开发者选项 → 无线调试”，打开开关并允许当前网络。</li><li>记下主页面显示的 <strong>IP 地址和连接端口</strong>。</li><li>打开“使用配对码配对设备”，保持页面不退出，记下临时的 <strong>配对端口</strong>和 6 位配对码。</li></ol>
+        <div class="callout warn"><strong>不要公开配对码。</strong>它虽然会过期，但发布教程或截图时仍应打码；设备 GUID、MAC 地址和公网信息也应隐藏。</div>
+      </section>
+
+      <section id="ports">
+        <h2>三、最大坑：配对端口 ≠ 连接端口</h2>
+        <table><thead><tr><th>项目</th><th>本次示例</th><th>出现位置</th><th>对应命令</th><th>有效期</th></tr></thead><tbody>
+          <tr><td><strong>配对端口</strong></td><td><code>40975</code></td><td>“使用配对码配对设备”弹窗</td><td><code>adb pair</code></td><td>临时；退出页面可能变化</td></tr>
+          <tr><td><strong>连接端口</strong></td><td><code>43733</code></td><td>无线调试主页面</td><td><code>adb connect</code></td><td>本次无线调试会话</td></tr>
+        </tbody></table>
+        <p>先配对，再连接。为避免把配对码写进 Shell 历史，建议让 ADB 交互式询问：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code># 第一步：使用“配对端口”
+adb pair 192.168.50.195:40975
+# Enter pairing code: ******
+
+# 第二步：使用“连接端口”
+adb connect 192.168.50.195:43733
+
+# 验证
+adb devices -l</code></pre></div>
+        <p>成功后会看到类似：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code>192.168.50.195:43733  device  product:BRAVIA_AE2_CN  model:BRAVIA_4K_AE2</code></pre></div>
+        <details><summary>如何自动发现两个端口？</summary><p>电视停留在配对页面时，可用 ADB 的 mDNS 浏览；macOS 还可使用系统自带的 <code>dns-sd</code>：</p>
+          <div class="codebox"><button class="copy">复制</button><pre><code>adb mdns services
+
+dns-sd -B _adb-tls-pairing._tcp local.
+dns-sd -B _adb-tls-connect._tcp local.</code></pre></div>
+        </details>
+        <div class="callout warn"><strong>典型报错：</strong>把连接端口用于 <code>adb pair</code>，常见结果是 <code>protocol fault</code>；把配对端口用于 <code>adb connect</code>，则可能立即断开，或在配对页面退出后失效。</div>
+      </section>
+
+      <section id="diagnose">
+        <h2>四、真实故障排查记录</h2>
+        <h3>1. 先确认电视和端口可达</h3>
+        <div class="codebox"><button class="copy">复制</button><pre><code># macOS / Linux
+ping -c 2 192.168.50.195
+nc -vz -w 3 192.168.50.195 43733
+
+# Windows PowerShell
+Test-Connection 192.168.50.195 -Count 2
+Test-NetConnection 192.168.50.195 -Port 43733</code></pre></div>
+        <h3>2. nc 能连，但 ADB 报 “No route to host”</h3>
+        <p>本次在 macOS 上遇到：普通 TCP 测试成功，ADB 后台进程却被本地网络隐私控制拦截。优先进入“系统设置 → 隐私与安全性 → 本地网络”，允许当前终端或执行 ADB 的应用，然后重启 ADB：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code>adb kill-server
+adb start-server
+adb connect 192.168.50.195:43733</code></pre></div>
+        <details><summary>高级备用：仅在 ADB 进程被拦截时使用本机 TCP 转发</summary>
+          <p>让 Python 访问电视，ADB 只连接回环地址。用完立即按 Ctrl+C 关闭。</p>
+          <div class="codebox"><button class="copy">复制</button><pre><code># tcp_proxy.py
+import socket, threading
+
+LISTEN = ("127.0.0.1", 43734)
+TARGET = ("192.168.50.195", 43733)
+
+def pipe(src, dst):
+    try:
+        while data := src.recv(262144):
+            dst.sendall(data)
+    finally:
+        try: dst.shutdown(socket.SHUT_WR)
+        except OSError: pass
+
+def relay(client):
+    upstream = socket.create_connection(TARGET)
+    a = threading.Thread(target=pipe, args=(client, upstream), daemon=True)
+    b = threading.Thread(target=pipe, args=(upstream, client), daemon=True)
+    a.start(); b.start(); a.join(); b.join()
+    client.close(); upstream.close()
+
+with socket.create_server(LISTEN) as server:
+    while True:
+        client, _ = server.accept()
+        threading.Thread(target=relay, args=(client,), daemon=True).start()
+
+# 运行 python3 tcp_proxy.py
+# 然后 adb connect 127.0.0.1:43734</code></pre></div>
+        </details>
+        <h3>3. APK 大文件安装时设备变为 offline</h3>
+        <p>如果使用自制转发器，不能用“非阻塞 socket + 直接 sendall”粗略转发大文件，否则缓冲区可能出现 <code>Resource temporarily unavailable</code>。上面的双线程阻塞式转发可避免此问题。</p>
+      </section>
+
+      <section id="airplay">
+        <h2>五、确认现有 AirPlay 到底是谁提供的</h2>
+        <p>macOS 可以直接浏览局域网的 AirPlay 与 RAOP（音频）服务：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code>dns-sd -B _airplay._tcp local.
+dns-sd -B _raop._tcp local.
+dns-sd -L '乐播投屏（BRAVIA 5）' _airplay._tcp local.</code></pre></div>
+        <p>本次解析结果显示，“乐播投屏（BRAVIA 5）”来自电视，AirPlay 服务端口为 <code>52244</code>。ADB 进一步确认包名与服务：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code># macOS / Linux
+adb shell "pm list packages | grep -Ei 'airplay|hpplay|cast'"
+adb shell "dumpsys activity services | grep -Ei 'AirPlayService|hpplay'"
+
+# Windows
+adb shell pm list packages | findstr /I "airplay hpplay cast"</code></pre></div>
+        <p>检测到的付费应用包名是 <code>com.hpplay.happyplay.aw</code>。检查系统包后，没有发现原生 Chromecast 接收包；Wi‑Fi Display/Miracast 也没有可直接启用的完整接收能力。因此需要安装独立、合法的开源接收器。</p>
+      </section>
+
+      <section id="opensource">
+        <h2>六、安装开源 AirPlay Server</h2>
+        <p>采用 F-Droid 收录的 <strong>AirPlay Server</strong>，包名 <code>io.github.jqssun.airplay</code>。它基于 UxPlay，支持 Android TV、H.264/H.265 镜像以及 AAC/ALAC 音频。本文测试版本为 <code>0.0.31</code>，包含电视所需的 <code>armeabi-v7a</code> 原生库。</p>
+        <div class="callout"><strong>下载来源：</strong>优先从 F-Droid 应用页取得当前版本，不要从不明 APK 站下载。本文测试 APK 的 SHA-256 为 <code>c5dce5c29ab52157bdaa406e485f9bfaab7d8d59c523d93622a33b253a28f410</code>。</div>
+        <div class="codebox"><button class="copy">复制</button><pre><code>adb install -r io.github.jqssun.airplay_31.apk
+
+adb shell monkey -p io.github.jqssun.airplay \
+  -c android.intent.category.LEANBACK_LAUNCHER 1
+
+adb shell dumpsys package io.github.jqssun.airplay | grep -E 'versionName|versionCode'
+adb shell dumpsys activity services io.github.jqssun.airplay</code></pre></div>
+        <p>启动后，电视出现“Waiting for connection…”，新的接收器名称为 <code>Android AirPlay</code>。再次浏览 mDNS：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code>dns-sd -B _airplay._tcp local.
+dns-sd -L 'Android AirPlay' _airplay._tcp local.
+nc -vz -w 3 192.168.50.195 7000</code></pre></div>
+        <h3>确认免费接收器工作后，可逆停用乐播</h3>
+        <div class="codebox"><button class="copy">复制</button><pre><code># 停用乐播：不卸载、不清数据
+adb shell pm disable-user --user 0 com.hpplay.happyplay.aw
+
+# 需要恢复时
+adb shell pm enable com.hpplay.happyplay.aw</code></pre></div>
+        <div class="callout good"><strong>这不是破解。</strong>没有修改乐播 APK、付费状态或服务器校验，只是使用另一个开源接收器，并可逆地停用原应用。</div>
+      </section>
+
+      <section id="verify">
+        <h2>七、最终验证记录</h2>
+        <div class="result-grid"><div><b>1 connected</b>客户端建立 AirPlay 会话</div><div><b>2880×2160</b>收到高分辨率镜像</div><div><b>HEVC / H.265</b>调用电视硬件解码器</div></div>
+        <p>关键日志包括：</p>
+        <div class="codebox"><button class="copy">复制</button><pre><code>Client connected (1)
+mirror running: 1
+Video size: 2880.0x2160.0
+video_set_codec: 2 (h265_enabled=1)
+Video codec started: video/hevc 2880x2160</code></pre></div>
+        <p>同时验证：乐播原端口 <code>52244</code> 已拒绝连接；开源接收器端口 <code>7000</code> 正常开放。此后在 iPhone、iPad 或 Mac 的“屏幕镜像”菜单中选择 <code>Android AirPlay</code> 即可。</p>
+        <div class="callout warn"><strong>DRM 限制：</strong>Netflix、Apple TV+ 等受 FairPlay/DRM 保护的内容通常无法通过开源接收器镜像。这是内容保护限制，不是安装失败。普通桌面、照片、网页和非 DRM 视频可正常使用。</div>
+      </section>
+
+      <section id="security">
+        <h2>八、安全收尾与日常使用</h2>
+        <ul><li>调试完成后运行 <code>adb disconnect</code> 和 <code>adb kill-server</code>。</li><li>不再需要远程维护时，关闭电视的“无线调试”。</li><li>在“已配对设备”列表中可以随时忘记电脑，撤销 ADB 信任。</li><li>不要在路由器上把 ADB 端口映射到公网。</li><li>开源接收器建议开启 PIN，避免同一局域网内的陌生设备误投。</li></ul>
+      </section>
+
+      <section id="sources">
+        <h2>参考资料</h2>
+        <ul>
+          <li><a href="https://developer.android.com/tools/releases/platform-tools" rel="noreferrer">Google：SDK Platform-Tools 下载与版本说明</a></li>
+          <li><a href="https://developer.android.com/studio/run/device" rel="noreferrer">Google：通过 Wi‑Fi 配对和调试 Android 设备</a></li>
+          <li><a href="https://developer.android.com/tools/adb" rel="noreferrer">Google：Android Debug Bridge 使用文档</a></li>
+          <li><a href="https://formulae.brew.sh/cask/android-platform-tools" rel="noreferrer">Homebrew：android-platform-tools</a></li>
+          <li><a href="https://f-droid.org/packages/io.github.jqssun.airplay/" rel="noreferrer">F-Droid：AirPlay Server</a></li>
+          <li><a href="https://github.com/jqssun/android-airplay-server" rel="noreferrer">GitHub：AirPlay Server 源代码</a></li>
+        </ul>
+      </section>
+    </main>
+    <footer>本文命令中的 IP 与端口仅为局域网示例；配对码、设备 GUID 与 MAC 地址均未公开。请仅调试你有权管理的设备。</footer>
+  </div>
+  <script>
+    document.querySelectorAll('.copy').forEach((button) => {
+      button.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(button.nextElementSibling.innerText);
+        const old = button.textContent; button.textContent = '已复制';
+        setTimeout(() => button.textContent = old, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
+
