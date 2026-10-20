@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="知照 LightSense 是免费、离线的 Android 照度计：实时 lux 测量、参考照度计校准、本地记录、五种语言与离线开源许可。介绍 0.2.1 APK 的功能、安装和测量边界。">
+<link rel="canonical" href="https://shuimu2000.github.io/lightsense-android-lux-meter.html">
+<title>知照 LightSense：把 Android 手机变成离线照度计 | 水木的技术博客</title>
+<style>
+    :root { --bg:#f4f5f7; --paper:#fff; --ink:#17202a; --muted:#667085; --line:#e4e7ec; --brand:#d6335c; --brand2:#7c3aed; --good:#087a55; --code:#101828; --shadow:0 18px 50px rgba(16,24,40,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 10% 0%,rgba(214,51,92,.08),transparent 30rem),radial-gradient(circle at 90% 20%,rgba(124,58,237,.08),transparent 32rem),var(--bg); font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    a { color:var(--brand2); text-decoration-thickness:1px; text-underline-offset:3px; }
+    .shell { width:min(1120px,calc(100% - 32px)); margin:32px auto 72px; }
+    .hero,main,.toc { background:rgba(255,255,255,.95); border:1px solid rgba(228,231,236,.9); box-shadow:var(--shadow); }
+    .hero { position:relative; overflow:hidden; border-radius:28px; padding:56px; }
+    .hero::after { content:"ADB → AirPlay"; position:absolute; right:-18px; bottom:-34px; color:rgba(214,51,92,.07); font-size:clamp(54px,10vw,116px); font-weight:900; white-space:nowrap; letter-spacing:-5px; }
+    .eyebrow { color:var(--brand); font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { max-width:880px; margin:12px 0 18px; font-size:clamp(34px,5vw,62px); line-height:1.08; letter-spacing:-.035em; }
+    .lede { max-width:780px; color:var(--muted); font-size:19px; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+    .pill { border-radius:999px; padding:6px 12px; background:#f2f4f7; color:#475467; font-size:13px; font-weight:650; }
+    .toc { border-radius:20px; margin:22px 0; padding:22px 28px; }
+    .toc strong { margin-right:14px; }
+    .toc a { display:inline-block; margin:4px 12px 4px 0; color:#475467; text-decoration:none; }
+    main { border-radius:28px; padding:28px 56px 56px; }
+    section { padding-top:42px; }
+    h2 { margin:0 0 18px; font-size:clamp(26px,3vw,36px); line-height:1.25; letter-spacing:-.02em; }
+    h3 { margin:30px 0 10px; font-size:21px; }
+    p { margin:10px 0 16px; }
+    ul,ol { padding-left:1.4em; }
+    li+li { margin-top:6px; }
+    .summary,.callout { border-radius:16px; padding:18px 20px; margin:20px 0; }
+    .summary { background:linear-gradient(135deg,#fff2f5,#f6f0ff); border:1px solid #f4cbd7; }
+    .callout { background:#f8fafc; border:1px solid var(--line); }
+    .callout.good { background:#ecfdf3; border-color:#abefc6; }
+    .callout.warn { background:#fffaeb; border-color:#fedf89; }
+    .kicker { font-weight:800; color:var(--brand); }
+    table { width:100%; border-collapse:collapse; margin:18px 0 24px; overflow:hidden; border-radius:14px; border:1px solid var(--line); }
+    th,td { padding:13px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { background:#f9fafb; font-size:14px; color:#475467; }
+    tr:last-child td { border-bottom:0; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em; }
+    code:not(pre code) { padding:.12em .36em; border-radius:5px; background:#f2f4f7; color:#344054; }
+    .codebox { position:relative; margin:14px 0 22px; }
+    pre { margin:0; padding:19px 20px; overflow-x:auto; border-radius:14px; background:var(--code); color:#e5e7eb; line-height:1.55; box-shadow:inset 0 1px rgba(255,255,255,.07); }
+    .copy { position:absolute; top:9px; right:9px; border:1px solid #475467; border-radius:8px; padding:5px 9px; color:#d0d5dd; background:#1d2939; cursor:pointer; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; align-items:center; margin:22px 0; }
+    .flow div { min-height:88px; display:grid; place-items:center; text-align:center; padding:12px; border:1px solid var(--line); border-radius:14px; background:#fff; font-weight:750; }
+    .flow .arrow { min-height:auto; border:0; background:transparent; color:var(--brand); font-size:24px; }
+    details { border:1px solid var(--line); border-radius:14px; padding:13px 16px; margin:14px 0; background:#fff; }
+    summary { cursor:pointer; font-weight:750; }
+    .result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0; }
+    .result-grid div { padding:18px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); }
+    .result-grid b { display:block; color:var(--good); font-size:24px; margin-bottom:2px; }
+    footer { color:var(--muted); font-size:13px; margin-top:24px; text-align:center; }
+    @media(max-width:760px){ .shell{width:min(100% - 20px,1120px);margin-top:10px}.hero,main{padding:28px 22px;border-radius:20px}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.result-grid{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap} }
+    @media print { body{background:#fff}.shell{width:100%;margin:0}.hero,main,.toc{box-shadow:none;border-color:#ddd}.copy{display:none} }
+  
+:root{--brand:#b66b18;--brand2:#946018}.hero::after{content:"LightSense";color:rgba(182,107,24,.07)}.back{display:inline-block;margin-bottom:18px}.download{display:inline-block;padding:12px 20px;border-radius:12px;background:#946018;color:white;text-decoration:none;font-weight:700}.facts{display:flex;flex-wrap:wrap;gap:10px}.facts span{padding:8px 14px;background:#fff7e8;border:1px solid #eed4a5;border-radius:12px}a:focus-visible{outline:3px solid #946018;outline-offset:4px}
+</style></head><body><div class="shell">
+<a class="back" href="index.html">← 返回水木的技术博客</a>
+<header class="hero"><div class="eyebrow">Android · LightSense · 家庭照明</div>
+<h1>知照 LightSense：<br>用手机看见身边的光</h1>
+<p class="lede">桌面到底亮不亮？先让读数提供一点依据。我做了一款免费、离线的 Android 照度计，使用手机环境光传感器测量照度，并把校准、记录和多语言支持放进同一个小工具。</p>
+<div class="meta"><span class="pill">2026-10-20</span><span class="pill">版本 0.2.1</span><span class="pill">Android 8.0+</span><span class="pill">Toby Apps Studio</span></div></header>
+<nav class="toc" aria-label="文章目录"><strong>目录</strong><a href="#why">为什么做</a><a href="#features">有什么功能</a><a href="#use">怎么测量</a><a href="#limits">精度与限制</a><a href="#download">下载与安装</a><a href="#privacy">数据与许可</a></nav>
+<main><section id="why"><h2>从家里的桌面照明开始</h2>
+<p>这个项目的起点很简单：想知道家里桌面、显示器附近和房间不同位置的照明情况。相比只凭眼睛判断，我希望有一个能随手打开、看读数、保存结果的工具，并且免费使用、没有订阅。</p>
+<p>中文名称是<strong>知照 · 照度计</strong>，英文名称是 <strong>LightSense · Lux Meter</strong>。第一版先做 Android，因为设备如果配备环境光传感器，系统就能提供以 lux 为单位的读数，适合先把测量流程做好。</p>
+<div class="callout"><strong>测的是照度，不是灯泡流明。</strong>lux 描述某个位置单位面积接收到的光；lumen（流明）描述光通量。这个 App 测量手机感光位置的照度，不能直接测出灯泡总共发出多少流明。</div></section>
+<section id="features"><h2>0.2.1 已经能做什么</h2>
+<div class="facts"><span>免费、离线</span><span>环境光传感器</span><span>五种语言</span><span>本地记录</span></div>
+<table><thead><tr><th>功能</th><th>使用方式</th></tr></thead><tbody>
+<tr><td>实时照度</td><td>显示当前 lux、时间加权均值、最低值和最高值，支持暂停、继续及统计清零。</td></tr>
+<tr><td>稳定性判断</td><td>观察最近约 3 秒的读数波动，帮助判断何时适合保存；稳定不等于准确。</td></tr>
+<tr><td>参考照度计校准</td><td>输入标准仪器参考值，预览比例系数并应用；也能恢复默认校准。</td></tr>
+<tr><td>本地历史</td><td>保存测量摘要、位置、备注以及当时的校准快照，可查看详情和删除记录。</td></tr>
+<tr><td>多语言</td><td>支持中文、英语、法语、德语和西班牙语，默认跟随系统，也能在设置中手动切换。</td></tr>
+<tr><td>离线开源许可</td><td>在“设置 → 开源许可”中阅读完整第三方许可文本。</td></tr>
+</tbody></table>
+<p>测量引擎通过 Android 的 <code>Sensor.TYPE_LIGHT</code> 获取数据，不使用摄像头估算。硬件刷新频率、量程和传感器位置取决于手机；没有这类传感器的设备会显示不支持提示。</p></section>
+<section id="use"><h2>一次测量，按这几个步骤来</h2><ol>
+<li>打开“测量”，找到手机的感光区域。它通常在顶部附近，具体位置以设备为准，避免用手、保护壳或物体遮挡。</li>
+<li>把手机放到目标位置，尽量固定感光面的高度、方向和姿态。比较不同位置时，保持测量方式一致。</li>
+<li>静置约 3 秒，观察读数及稳定提示。需要时清零统计，开始一轮新的比较。</li>
+<li>点击“保存记录”，填写位置和可选备注。保存会暂停测量，下一轮点击“继续测量”。</li>
+<li>有参考照度计时，让两者在尽可能相同的光照条件下测量，再输入参考值进行单点比例校准。</li></ol>
+<p>校准会重置当前统计并保持暂停。每条历史记录保留当时的校准信息，之后修改系数不会改写旧记录。</p></section>
+<section id="limits"><h2>读数有用，但要知道边界</h2>
+<p>手机不是经过计量校准的专业照度计。不同传感器、光源光谱、入射角度、遮挡和测量姿态都会影响结果。单点校准只能修正一部分偏差，不能消除全量程误差或光谱差异。</p>
+<p>我已经在实体 Android 手机上验证了照明变化时的读数响应，也验证了语言切换和离线许可页面；此前 16 项自动测试通过。<strong>这些验证证明功能能够运行，不代表已完成与专业仪器的精度认证。</strong></p>
+<p>它适合做家庭照明的初步观察和同一设备、相同姿态下的相对比较。涉及工程验收、职业照明评估等场景，应使用符合相应要求的专业仪器。</p></section>
+<section id="download"><h2>下载 0.2.1 APK</h2>
+<p>安装包通过 GitHub Release 附件分发。打开发布页，在 <strong>Assets</strong> 中选择 <code>LightSense-0.2.1-release.apk</code>，不要将自动生成的源码 ZIP 当成安装包。</p>
+<p><a class="download" href="https://github.com/Shuimu2000/LightSense/releases/tag/v0.2.1">打开 GitHub Release →</a></p>
+<div class="callout"><strong>当前为受限下载：</strong>LightSense 仓库目前是私有仓库。只有已获授权并登录 GitHub 的账号能够访问发布页和附件；其他访客可能看到 404。本文公开介绍应用，安装包暂未向所有访客开放。Google Play 开发者账号仍在等待审批，应用尚未上架。</div>
+<ol><li>在 Android 8.0 或更新系统的手机上下载安装包，且设备需要配备环境光传感器才能测量。</li><li>从下载来源打开 APK，按系统提示允许该来源安装应用，然后完成安装。</li><li>首次打开后观察实时读数；可短暂遮住感光区域再移开，检查读数是否响应。</li></ol>
+<div class="callout warn"><strong>旧调试版用户请注意：</strong>本次 release APK 使用正式签名，与此前 debug APK 不同，不能直接覆盖安装。卸载旧版会删除本地历史和校准数据；0.2.1 当前没有备份或导出功能，保留重要记录后再决定是否更换。</div>
+<p>附件同时提供 <code>SHA256SUMS</code> 和 <code>SIGNATURE.txt</code>。本次 APK 的 SHA-256：</p>
+<pre><code>10ef0da1d1be032abac4b306de6e7c7dbc2276d146f55336016624e317c67123</code></pre>
+<p>当前 APK 可直接安装测试；Google Play 上架还需要完成账号验证、正式 AAB 和相应兼容性准备。</p></section>
+<section id="privacy"><h2>数据留在本地，许可随包交付</h2>
+<p>当前版本不申请联网、相机或定位权限，没有账号登录、广告或订阅。测量摘要和校准档案保存在设备本地；清除应用数据或卸载会删除这些内容。</p>
+<p>应用使用了 AndroidX、Kotlin 等第三方组件，完整许可和需要保留的版权声明已随安装包提供，可以离线阅读。使用这些组件不意味着本项目已经公开源码；目前源码仓库仍为私有。</p>
+<p>后续希望继续完善测量体验，并考虑多点测量和 CSV 导出。这些是后续方向，不属于 0.2.1 已实现功能。</p></section></main>
+<footer>© 2026 Shuimu · Toby Apps Studio · <a href="index.html">返回首页</a></footer></div></body></html>
