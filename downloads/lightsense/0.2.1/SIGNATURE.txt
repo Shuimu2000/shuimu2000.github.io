@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Toby Apps Studio
+Signer #1 certificate SHA-256 digest: 35f27b8734d1e1d0e963f079ad68daae262718fa02f0954012d422790b37b8d8
+Signer #1 certificate SHA-1 digest: 5a95f1201240f2608f4e59a97e1a59ee278fbeee
+Signer #1 certificate MD5 digest: a3a99f1658b3a8d630d4c06e26cd9e13
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: 32f9e69b721ad3e5698f3fbe7bb2fd54d63d5eb4aede78ab5ebea7c61e22771e
+Signer #1 public key SHA-1 digest: fd40c7f0b753ad1c6f349677230d6747f9e73689
+Signer #1 public key MD5 digest: 5561e236443021cedb744e76e9095479
