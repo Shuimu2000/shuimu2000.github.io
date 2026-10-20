@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Shuimu’s personal tech blog: smart TVs, open-source software, home entertainment, and hands-on digital projects.">
+  <title>Shuimu’s Tech Blog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17212b;
+      --muted: #62707d;
+      --paper: #f5f2ea;
+      --card: #fffdf8;
+      --accent: #d54b32;
+      --line: #ded8cb;
+      --shadow: 0 18px 55px rgba(49, 43, 34, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(213, 75, 50, .10), transparent 34rem),
+        var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.7;
+    }
+    .shell { width: min(1080px, calc(100% - 36px)); margin: 0 auto; }
+    header { padding: 76px 0 42px; }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0 12px; font-size: clamp(2.5rem, 8vw, 5.6rem); line-height: 1.03; letter-spacing: -.05em; }
+    .intro { max-width: 650px; margin: 0; color: var(--muted); font-size: 1.12rem; }
+    main { padding: 18px 0 88px; }
+    .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    h2 { margin: 0; font-size: 1.35rem; }
+    .count { color: var(--muted); font-size: .92rem; }
+    .post {
+      display: grid;
+      grid-template-columns: minmax(250px, .9fr) minmax(0, 1.25fr);
+      overflow: hidden;
+      color: inherit;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .post + .post { margin-top: 28px; }
+    .cover.lux-cover { display:flex; flex-direction:column; justify-content:center; padding:40px; background:linear-gradient(135deg,#28251e,#805f2e); color:#fff3d9; }
+    .lux-cover strong { font-size:clamp(2.8rem,7vw,4.7rem); line-height:1.1; letter-spacing:-.04em; }
+    .lux-cover span { margin-top:18px; opacity:.85; }
+    .post:hover { transform: translateY(-4px); box-shadow: 0 24px 65px rgba(49, 43, 34, .16); }
+    .cover { min-height: 340px; background: #d9d0bf; }
+    .cover img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .content { padding: clamp(28px, 5vw, 58px); align-self: center; }
+    .meta { color: var(--accent); font-size: .88rem; font-weight: 750; letter-spacing: .05em; }
+    h3 { margin: 10px 0 16px; font-size: clamp(1.8rem, 4vw, 3.15rem); line-height: 1.16; letter-spacing: -.035em; }
+    .summary { margin: 0 0 24px; color: var(--muted); }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { padding: 5px 11px; color: #5b5147; background: #eee9df; border-radius: 999px; font-size: .82rem; }
+    footer { padding: 28px 0 44px; color: var(--muted); border-top: 1px solid var(--line); font-size: .9rem; }
+    @media (max-width: 760px) {
+      header { padding-top: 48px; }
+      .post { grid-template-columns: 1fr; }
+      .cover { min-height: 250px; max-height: 440px; }
+    }
+
+.language-switch{display:flex;justify-content:flex-end;gap:6px;padding:12px 18px;margin:0 auto;max-width:1156px;font:600 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.language-switch a{display:inline-block;padding:7px 12px;border:1px solid #ded8cb;border-radius:9px;background:#fffdf8;color:#514638;text-decoration:none}.language-switch a[aria-current="page"]{background:#514638;color:#fff}.language-switch a:focus-visible{outline:3px solid #b66b18;outline-offset:3px}@media(max-width:760px){html[lang="en"] table{white-space:normal;display:table;table-layout:fixed}html[lang="en"] th,html[lang="en"] td{overflow-wrap:anywhere}}
+</style>
+<link rel="alternate" hreflang="zh-CN" href="https://shuimu2000.github.io/index.html"><link rel="alternate" hreflang="en" href="https://shuimu2000.github.io/index-en.html"></head>
+<body><nav class="language-switch" aria-label="Language"><a href="index.html" lang="zh-CN" hreflang="zh-CN">中文</a><a href="index-en.html" lang="en" hreflang="en" aria-current="page">English</a></nav>
+  <header class="shell">
+    <div class="eyebrow">Shuimu · Digital Notes</div>
+    <h1>Shuimu’s Tech Blog</h1>
+    <p class="intro">Notes on smart TVs, open-source software, home entertainment, and hands-on digital projects. Every article is grounded in real devices, commands actually run, and thorough verification.</p>
+  </header>
+
+  <main class="shell">
+    <div class="section-title">
+      <h2>Latest posts</h2>
+      <span class="count">2 posts</span>
+    </div>
+
+    <a class="post" href="lightsense-android-lux-meter-en.html">
+      <div class="cover lux-cover"><strong>知照<br>LightSense</strong><span>See the light around you · Android lux meter</span></div>
+      <div class="content"><div class="meta">October 20, 2026 · Android apps</div><h3>LightSense: a free, offline lux meter</h3><p class="summary">An Android ambient-light-sensor app inspired by desk lighting at home. Explore live lux readings, calibration, local history, five languages, and the installation and accuracy limits of version 0.2.1.</p><div class="tags"><span class="tag">Android</span><span class="tag">LightSense</span><span class="tag">Home lighting</span></div></div>
+    </a>
+
+    <a class="post" href="sony-bravia-free-airplay-guide.html">
+      <div class="cover">
+        <img src="xiaohongshu-cover.png" alt="Cover: Free AirPlay on a Sony BRAVIA TV">
+      </div>
+      <div class="content">
+        <div class="meta">September 2, 2026 · Home entertainment · In Chinese</div>
+        <h3>Free AirPlay on a Sony BRAVIA 5</h3>
+        <p class="summary">From installing ADB on macOS and Windows to wireless pairing, port pitfalls, and an open-source AirPlay receiver tested with 4K HEVC mirroring. No paid-app bypasses; all changes are reversible. This article is in Chinese.</p>
+        <div class="tags">
+          <span class="tag">Android TV</span>
+          <span class="tag">AirPlay</span>
+          <span class="tag">ADB</span>
+          <span class="tag">Open source</span>
+        </div>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    <div class="shell">© 2026 Shuimu · Built with GitHub Pages</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="LightSense is a free, offline Android lux meter with live readings, reference-meter calibration, local history, five languages, and bundled license notices."><link rel="canonical" href="https://shuimu2000.github.io/lightsense-android-lux-meter-en.html"><title>LightSense: See the Light Around You with Your Phone | Shuimu’s Tech Blog</title><style>
+    :root { --bg:#f4f5f7; --paper:#fff; --ink:#17202a; --muted:#667085; --line:#e4e7ec; --brand:#d6335c; --brand2:#7c3aed; --good:#087a55; --code:#101828; --shadow:0 18px 50px rgba(16,24,40,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 10% 0%,rgba(214,51,92,.08),transparent 30rem),radial-gradient(circle at 90% 20%,rgba(124,58,237,.08),transparent 32rem),var(--bg); font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    a { color:var(--brand2); text-decoration-thickness:1px; text-underline-offset:3px; }
+    .shell { width:min(1120px,calc(100% - 32px)); margin:32px auto 72px; }
+    .hero,main,.toc { background:rgba(255,255,255,.95); border:1px solid rgba(228,231,236,.9); box-shadow:var(--shadow); }
+    .hero { position:relative; overflow:hidden; border-radius:28px; padding:56px; }
+    .hero::after { content:"ADB → AirPlay"; position:absolute; right:-18px; bottom:-34px; color:rgba(214,51,92,.07); font-size:clamp(54px,10vw,116px); font-weight:900; white-space:nowrap; letter-spacing:-5px; }
+    .eyebrow { color:var(--brand); font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { max-width:880px; margin:12px 0 18px; font-size:clamp(34px,5vw,62px); line-height:1.08; letter-spacing:-.035em; }
+    .lede { max-width:780px; color:var(--muted); font-size:19px; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+    .pill { border-radius:999px; padding:6px 12px; background:#f2f4f7; color:#475467; font-size:13px; font-weight:650; }
+    .toc { border-radius:20px; margin:22px 0; padding:22px 28px; }
+    .toc strong { margin-right:14px; }
+    .toc a { display:inline-block; margin:4px 12px 4px 0; color:#475467; text-decoration:none; }
+    main { border-radius:28px; padding:28px 56px 56px; }
+    section { padding-top:42px; }
+    h2 { margin:0 0 18px; font-size:clamp(26px,3vw,36px); line-height:1.25; letter-spacing:-.02em; }
+    h3 { margin:30px 0 10px; font-size:21px; }
+    p { margin:10px 0 16px; }
+    ul,ol { padding-left:1.4em; }
+    li+li { margin-top:6px; }
+    .summary,.callout { border-radius:16px; padding:18px 20px; margin:20px 0; }
+    .summary { background:linear-gradient(135deg,#fff2f5,#f6f0ff); border:1px solid #f4cbd7; }
+    .callout { background:#f8fafc; border:1px solid var(--line); }
+    .callout.good { background:#ecfdf3; border-color:#abefc6; }
+    .callout.warn { background:#fffaeb; border-color:#fedf89; }
+    .kicker { font-weight:800; color:var(--brand); }
+    table { width:100%; border-collapse:collapse; margin:18px 0 24px; overflow:hidden; border-radius:14px; border:1px solid var(--line); }
+    th,td { padding:13px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { background:#f9fafb; font-size:14px; color:#475467; }
+    tr:last-child td { border-bottom:0; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92em; }
+    code:not(pre code) { padding:.12em .36em; border-radius:5px; background:#f2f4f7; color:#344054; }
+    .codebox { position:relative; margin:14px 0 22px; }
+    pre { margin:0; padding:19px 20px; overflow-x:auto; border-radius:14px; background:var(--code); color:#e5e7eb; line-height:1.55; box-shadow:inset 0 1px rgba(255,255,255,.07); }
+    .copy { position:absolute; top:9px; right:9px; border:1px solid #475467; border-radius:8px; padding:5px 9px; color:#d0d5dd; background:#1d2939; cursor:pointer; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; align-items:center; margin:22px 0; }
+    .flow div { min-height:88px; display:grid; place-items:center; text-align:center; padding:12px; border:1px solid var(--line); border-radius:14px; background:#fff; font-weight:750; }
+    .flow .arrow { min-height:auto; border:0; background:transparent; color:var(--brand); font-size:24px; }
+    details { border:1px solid var(--line); border-radius:14px; padding:13px 16px; margin:14px 0; background:#fff; }
+    summary { cursor:pointer; font-weight:750; }
+    .result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0; }
+    .result-grid div { padding:18px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); }
+    .result-grid b { display:block; color:var(--good); font-size:24px; margin-bottom:2px; }
+    footer { color:var(--muted); font-size:13px; margin-top:24px; text-align:center; }
+    @media(max-width:760px){ .shell{width:min(100% - 20px,1120px);margin-top:10px}.hero,main{padding:28px 22px;border-radius:20px}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.result-grid{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap} }
+    @media print { body{background:#fff}.shell{width:100%;margin:0}.hero,main,.toc{box-shadow:none;border-color:#ddd}.copy{display:none} }
+
+:root{--brand:#b66b18;--brand2:#946018}.hero::after{content:"LightSense";color:rgba(182,107,24,.07)}.back{display:inline-block;margin-bottom:18px}.download{display:inline-block;padding:12px 20px;border-radius:12px;background:#946018;color:white;text-decoration:none;font-weight:700}.facts{display:flex;flex-wrap:wrap;gap:10px}.facts span{padding:8px 14px;background:#fff7e8;border:1px solid #eed4a5;border-radius:12px}a:focus-visible{outline:3px solid #946018;outline-offset:4px}
+
+.language-switch{display:flex;justify-content:flex-end;gap:6px;padding:12px 18px;margin:0 auto;max-width:1156px;font:600 14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.language-switch a{display:inline-block;padding:7px 12px;border:1px solid #ded8cb;border-radius:9px;background:#fffdf8;color:#514638;text-decoration:none}.language-switch a[aria-current="page"]{background:#514638;color:#fff}.language-switch a:focus-visible{outline:3px solid #b66b18;outline-offset:3px}@media(max-width:760px){html[lang="en"] table{white-space:normal;display:table;table-layout:fixed}html[lang="en"] th,html[lang="en"] td{overflow-wrap:anywhere}}
+</style><link rel="alternate" hreflang="zh-CN" href="https://shuimu2000.github.io/lightsense-android-lux-meter.html"><link rel="alternate" hreflang="en" href="https://shuimu2000.github.io/lightsense-android-lux-meter-en.html"></head><body><nav class="language-switch" aria-label="Language"><a href="lightsense-android-lux-meter.html" lang="zh-CN" hreflang="zh-CN">中文</a><a href="lightsense-android-lux-meter-en.html" lang="en" hreflang="en" aria-current="page">English</a></nav><div class="shell">
+<a class="back" href="index-en.html">← Back to Shuimu’s Tech Blog</a>
+<header class="hero"><div class="eyebrow">Android · LightSense · Home lighting</div>
+<h1>LightSense:<br>See the Light Around You with Your Phone</h1>
+<p class="lede">How bright is your desk, really? A reading can give you a starting point. I built a free, offline Android lux meter that uses your phone’s ambient light sensor, with calibration, local records, and multiple languages in one small app.</p>
+<div class="meta"><span class="pill">October 20, 2026</span><span class="pill">Version 0.2.1</span><span class="pill">Android 8.0+</span><span class="pill">Toby Apps Studio</span></div></header>
+<nav class="toc" aria-label="Contents"><strong>Contents</strong><a href="#why">The idea</a><a href="#features">Features</a><a href="#use">Taking a reading</a><a href="#limits">Accuracy and limits</a><a href="#download">Download</a><a href="#privacy">Data and licenses</a></nav>
+<main><section id="why"><h2>It started with the lighting at home</h2>
+<p>I wanted to understand the lighting on my desk, near my monitor, and in different parts of a room. Rather than relying only on how bright things looked, I wanted a tool I could open, read, and save a result with—free to use, with no subscription.</p>
+<p>The app is called <strong>LightSense · Lux Meter</strong> in English and <strong>知照 · 照度计</strong> in Chinese. I started with Android because, on phones equipped with an ambient light sensor, the system can supply readings in lux. That makes it a practical place to develop the measurement workflow first.</p>
+<div class="callout"><strong>It measures illuminance, not a bulb’s lumen output.</strong> Lux describes how much light reaches a unit of area at a particular location; lumens describe luminous flux. This app measures illuminance at the phone’s sensor. It cannot directly measure the total light output of a bulb.</div></section>
+<section id="features"><h2>What version 0.2.1 can do</h2>
+<div class="facts"><span>Free and offline</span><span>Ambient light sensor</span><span>Five languages</span><span>Local records</span></div>
+<table><thead><tr><th>Feature</th><th>What it does</th></tr></thead><tbody>
+<tr><td>Live illuminance</td><td>Shows current lux, a time-weighted average, minimum, and maximum. Pause, resume, or reset the statistics.</td></tr>
+<tr><td>Stability indicator</td><td>Checks fluctuations over roughly the last three seconds to help you decide when to save. A stable reading is not necessarily an accurate one.</td></tr>
+<tr><td>Reference-meter calibration</td><td>Enter a reference reading, preview the scale factor, and apply it. You can also restore the default calibration.</td></tr>
+<tr><td>Local history</td><td>Save measurement summaries, locations, notes, and the calibration snapshot used at the time. View details or delete records.</td></tr>
+<tr><td>Multiple languages</td><td>Chinese, English, French, German, and Spanish. Follow the system language or choose one in Settings.</td></tr>
+<tr><td>Offline license notices</td><td>Read the full third-party license texts under Settings → Open-source licenses.</td></tr>
+</tbody></table>
+<p>The measurement engine reads Android’s <code>Sensor.TYPE_LIGHT</code>; it does not estimate illuminance using the camera. Update frequency, range, and sensor location depend on the phone. Devices without the sensor receive an unsupported-device message.</p></section>
+<section id="use"><h2>How to take a reading</h2><ol>
+<li>Open the measurement screen and locate the phone’s light sensor. It is often near the top, but placement varies. Keep it clear of your hand, case, and other objects.</li>
+<li>Place the phone at the location you want to measure. Keep sensor height, orientation, and position consistent when comparing locations.</li>
+<li>Hold it still for about three seconds and observe the reading and stability indicator. Reset the statistics when starting a new comparison if needed.</li>
+<li>Tap Save record and enter a location and optional notes. Saving pauses measurement; tap Resume measurement for the next reading.</li>
+<li>If you have a reference lux meter, measure under conditions that are as similar as possible, then enter its reading to apply single-point proportional calibration.</li></ol>
+<p>Applying calibration resets the current statistics and leaves measurement paused. Each saved record retains its calibration information; changing the factor later does not rewrite old records.</p></section>
+<section id="limits"><h2>Useful readings, with clear limits</h2>
+<p>A phone is not a professionally calibrated lux meter. Sensor differences, light-source spectra, incident angles, obstructions, and positioning can all affect readings. Single-point calibration can correct some bias, but it cannot remove spectral differences or errors across the full measurement range.</p>
+<p>I have checked the response to changing light on a physical Android phone, along with language switching and offline license viewing. The app also passed 16 automated tests. <strong>These checks confirm that the features work; they do not certify accuracy against a professional instrument.</strong></p>
+<p>Use it for an initial look at home lighting and relative comparisons made with the same device in a consistent position. Engineering acceptance tests and workplace lighting assessments call for professional instruments that meet the relevant requirements.</p></section>
+<section id="download"><h2>Download the 0.2.1 APK</h2>
+<p>The signed <code>LightSense-0.2.1-release.apk</code> is hosted publicly on this website. It is about 8.3 MB and requires no GitHub login.</p>
+<p><a class="download" href="downloads/lightsense/0.2.1/LightSense-0.2.1-release.apk" download>Download Android APK · 0.2.1 →</a></p>
+<div class="callout"><strong>Public APK download:</strong> No account or repository access is required. The application source repository remains private. The Google Play developer account is awaiting approval, and the app is not yet listed on Google Play.</div>
+<ol><li>Download the APK on a phone running Android 8.0 or later. An ambient light sensor is required for measurements.</li><li>Open the downloaded APK, allow installation from that source if Android asks, and complete installation.</li><li>Open the app and observe the live reading. Briefly cover the light sensor and uncover it to check its response.</li></ol>
+<div class="callout warn"><strong>If you installed an earlier debug build:</strong> This release APK uses a different signing key and cannot be installed over the debug app. Uninstalling deletes local history and calibration data. Version 0.2.1 has no backup or export feature, so preserve any important information before deciding to switch.</div>
+<p>A <a href="downloads/lightsense/0.2.1/SHA256SUMS">SHA-256 checksum file</a> and <a href="downloads/lightsense/0.2.1/SIGNATURE.txt">signature verification report</a> are also available. The APK’s SHA-256 is:</p>
+<pre><code>10ef0da1d1be032abac4b306de6e7c7dbc2276d146f55336016624e317c67123</code></pre>
+<p>This APK is available for direct installation and testing. Google Play publication still requires account verification, a signed AAB, and the necessary compatibility preparation.</p></section>
+<section id="privacy"><h2>Local data and bundled license notices</h2>
+<p>The current version requests no internet, camera, or location permissions. It has no login, advertising, or subscription. Measurement summaries and calibration profiles stay on the device. Clearing app data or uninstalling deletes them.</p>
+<p>The app uses third-party components including AndroidX and Kotlin. Full license texts and required copyright notices are bundled with the APK for offline reading. Using those components does not mean this project’s source code is public; its source repository remains private.</p>
+<p>Future ideas include a better measurement experience, multi-point measurements, and CSV export. These are possible next steps, not features included in version 0.2.1.</p></section></main>
+<footer>© 2026 Shuimu · Toby Apps Studio · <a href="index-en.html">Back to home</a></footer></div></body></html>
